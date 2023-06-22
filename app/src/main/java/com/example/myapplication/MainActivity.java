@@ -8,11 +8,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
+
 
 public class MainActivity extends ListActivity {
 
-    String[] myArr = {"paint_1", "paint_2", "paint_3"};
+    String[] myArr = {"1", "2", "3"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
