@@ -1,36 +1,66 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.ListActivity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends AppCompatActivity {
 
-    String[] myArr = {"1", "2", "3"};
+    private EditText name,bloknot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        ArrayAdapter<String> monthAdapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, myArr);
+        name=findViewById(R.id.editText_name);
+        bloknot=findViewById(R.id.editText_bloknot);
+    }
+    public void savedData(View view){
+        String user_name=name.getText().toString();
+        String user_bloknot=bloknot.getText().toString();
 
-        setListAdapter(monthAdapter);
+        try {
+            FileOutputStream file=openFileOutput("data_o1.txt",MODE_PRIVATE);
+            file.write((user_bloknot).getBytes());
+            file.close();
+            name.setText("");
+            bloknot.setText("");
+            Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        String month = (String) getListAdapter().getItem(position);
-//        Toast.makeText(this, month, Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(MainActivity.this, MainActivity2.class);
-//        String eText = "information to send";
-        i.putExtra("block", month);
-        startActivity(i);
-        System.out.println();
+    public void getData(View view){
+        try {
+            FileInputStream file_input =openFileInput("data_o1.txt");
+            InputStreamReader reader=new InputStreamReader(file_input);
+            BufferedReader bufferedReader=new BufferedReader(reader);
+
+            StringBuilder stringBuilder=new StringBuilder();
+            String line="";
+            while ((line=bufferedReader.readLine())!=null){
+                stringBuilder.append(line).append("\n");
+            }
+
+            bloknot.setText(stringBuilder);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+        }
     }
+
+
 }
